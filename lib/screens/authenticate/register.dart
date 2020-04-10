@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'sign_in.dart';
+import 'authenticate.dart';
+import 'package:brew_crew/models/user.dart';
 import 'package:brew_crew/services/fb_auth.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
-  
-  final AuthService _authService = AuthService();
+class _RegisterState extends State<Register> {
 
-  //States of TextFields
+  final AuthService _authService = AuthService();
+  
+  //TextField States
   String email = '';
   String password = '';
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +24,7 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text("Sign In to Brewer"),        
+        title: Text("Sign Up for Brewer"),        
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -44,7 +47,7 @@ class _SignInState extends State<SignIn> {
               SizedBox(height: 20.0,),
               RaisedButton(
                 color: Colors.pink[400],
-                child: Text("Sign In", style: TextStyle(color: Colors.white),),                
+                child: Text("Register", style: TextStyle(color: Colors.white),),                
                 onPressed: () async {
                   print("Email: "+email);
                   print("Password: "+password);
