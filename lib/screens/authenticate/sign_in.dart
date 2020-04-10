@@ -18,6 +18,7 @@ class _SignInState extends State<SignIn> {
   //States of TextFields
   String email = '';
   String password = '';
+  String error = '';
   
   @override
   Widget build(BuildContext context) {
@@ -62,6 +63,7 @@ class _SignInState extends State<SignIn> {
                   labelText: "Password",
                   border: OutlineInputBorder()
                 ),
+                validator: (val) => val.length < 6 ? "Password must be at least 6 characters!" : null,
                 onChanged: (val) {
                   setState(() => password = val);
                 },
@@ -72,10 +74,19 @@ class _SignInState extends State<SignIn> {
                 color: Colors.pink[400],
                 child: Text("Sign In", style: TextStyle(color: Colors.white),),                
                 onPressed: () async {
-                  print("Email: "+email);
-                  print("Password: "+password);
+                  if (_formKey.currentState.validate()) {
+                    dynamic result = await _authService.signInEmailPassword(email, password);
+                    if (result == null) {
+                      setState(() => error = "Invalid Email/Password");
+                    }
+                  }
                 },
-              )
+              ),
+              SizedBox(height: 12.0,),
+              Text(
+                error,
+                style: TextStyle(color: Colors.red, fontSize: 15.0),
+              ),
             ],
           ),
         ),
