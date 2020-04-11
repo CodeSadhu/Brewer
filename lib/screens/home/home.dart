@@ -12,8 +12,8 @@ class _HomeState extends State<Home> {
 
   final AuthService _authService = AuthService();
   final formKey = GlobalKey<FormState>();
-  String phoneNo, verId, smsCode;
-	bool codeSent = false;
+  String phoneNo, verId, smsCode, verSms;
+	bool sentCode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
 											child: Column(
 												mainAxisAlignment: MainAxisAlignment.center,
 												children: <Widget>[
-													Padding(
+													sentCode ? Container() : Padding(
 														padding: EdgeInsets.only(left: 25.0, right: 25.0),
 														child: TextFormField(
 															keyboardType: TextInputType.phone,
@@ -62,7 +62,7 @@ class _HomeState extends State<Home> {
 															},
 														),
 													),
-													codeSent ? Padding(
+													sentCode ? Padding(
 														padding: EdgeInsets.only(left: 25.0, right: 25.0),
 														child: TextFormField(
 															keyboardType: TextInputType.phone,
@@ -78,10 +78,10 @@ class _HomeState extends State<Home> {
 														padding: EdgeInsets.only(left: 25.0, right: 25.0),
 														child: RaisedButton(
 															child: Center(
-																child: codeSent ? Text("Login") : Text("Verify"),
+																child: sentCode ? Text("Login") : Text("Verify"),
 															),
 															onPressed: (){
-																codeSent ? AuthService().signInViaOTP(smsCode, verId) : verifyNum(phoneNo);
+																sentCode ? _authService.signInViaOTP(smsCode, verId) : verifyNum(phoneNo);
 															},
 														),
 													)
@@ -99,13 +99,14 @@ class _HomeState extends State<Home> {
   }
   Future<void> verifyNum(num) async{
 		final PhoneVerificationCompleted verified = (AuthCredential authRes){
-			AuthService().signIn(authRes);
+			_authService.signIn(authRes);
 		};
 		final PhoneVerificationFailed failed = (AuthException authExcep){
 		
 		};
 		final PhoneCodeSent smsSent = (String verId, [int forceResend]){
 			this.verId = verId;
+      this.sentCode = !sentCode;
 		};
 		final PhoneCodeAutoRetrievalTimeout autoTimeOut = (String verId){
 			this.verId = verId;
@@ -119,5 +120,6 @@ class _HomeState extends State<Home> {
 			codeSent: smsSent,
 			codeAutoRetrievalTimeout: autoTimeOut
 		);
+    
 	}
 }

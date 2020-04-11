@@ -53,11 +53,18 @@ class AuthService{
   }
   //Phone OTP Verification
   signIn(AuthCredential authCreds) {
-    FirebaseAuth.instance.signInWithCredential(authCreds);
+    print(authCreds);
+    try{
+      // FirebaseAuth.instance.signInWithCredential(authCreds);
+      // if (authCreds == )
+    }catch(e){
+      print(e.toString());
+    }
   }
   signInViaOTP(smsCode, verId) {
+    print(smsCode);
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
-        verificationId: verId, smsCode: smsCode);
+        verificationId: verId, smsCode: smsCode);        
     signIn(authCredential);
   }
   //SignOut
