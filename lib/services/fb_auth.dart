@@ -51,6 +51,15 @@ class AuthService{
       return null;
     }
   }
+  //Phone OTP Verification
+  signIn(AuthCredential authCreds) {
+    FirebaseAuth.instance.signInWithCredential(authCreds);
+  }
+  signInViaOTP(smsCode, verId) {
+    AuthCredential authCredential = PhoneAuthProvider.getCredential(
+        verificationId: verId, smsCode: smsCode);
+    signIn(authCredential);
+  }
   //SignOut
   Future signOut() async {
     try{
